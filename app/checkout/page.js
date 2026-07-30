@@ -10,6 +10,10 @@ export default function CheckoutPage() {
   const amount = searchParams.get("amount") || "0";
 
   const [method, setMethod] = useState("bkash");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
   const [trxId, setTrxId] = useState("");
 
   const paymentNumbers = {
@@ -19,8 +23,8 @@ export default function CheckoutPage() {
   };
 
   function submitPayment() {
-    if (!trxId.trim()) {
-      alert("Please enter your Transaction ID (TrxID)");
+    if (!name || !phone || !address || !trxId) {
+      alert("Please fill in all required fields.");
       return;
     }
 
@@ -28,17 +32,19 @@ export default function CheckoutPage() {
       id: Date.now(),
       product,
       amount,
+      customerName: name,
+      phone,
+      email,
+      address,
       paymentMethod: method,
       trxId,
       status: "Pending",
       createdAt: new Date().toLocaleString(),
     };
 
-    const oldOrders = JSON.parse(localStorage.getItem("orders") || "[]");
-
-    oldOrders.push(order);
-
-    localStorage.setItem("orders", JSON.stringify(oldOrders));
+    const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+    orders.push(order);
+    localStorage.setItem("orders", JSON.stringify(orders));
 
     alert("Order Submitted Successfully!");
 
@@ -46,57 +52,75 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main
-      style={{
-        maxWidth: "600px",
-        margin: "40px auto",
-        padding: "20px",
-      }}
-    >
+    <main style={{ maxWidth: 600, margin: "40px auto", padding: 20 }}>
       <h1>Checkout</h1>
 
-      <hr />
-
       <h2>{product}</h2>
-
       <h3>Amount: ৳{amount}</h3>
 
       <hr />
 
-      <h3>Select Payment Method</h3>
+      <input
+        placeholder="Full Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+
+      <br /><br />
+
+      <input
+        placeholder="Phone Number"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+      />
+
+      <br /><br />
+
+      <input
+        placeholder="Email (Optional)"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+
+      <br /><br />
+
+      <textarea
+        placeholder="Full Address"
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+      />
+
+      <hr />
+
+      <h3>Payment Method</h3>
 
       <label>
         <input
           type="radio"
-          value="bkash"
           checked={method === "bkash"}
-          onChange={(e) => setMethod(e.target.value)}
+          onChange={() => setMethod("bkash")}
         />
         bKash
       </label>
 
       <br />
-      <br />
 
       <label>
         <input
           type="radio"
-          value="nagad"
           checked={method === "nagad"}
-          onChange={(e) => setMethod(e.target.value)}
+          onChange={() => setMethod("nagad")}
         />
         Nagad
       </label>
 
       <br />
-      <br />
 
       <label>
         <input
           type="radio"
-          value="rocket"
           checked={method === "rocket"}
-          onChange={(e) => setMethod(e.target.value)}
+          onChange={() => setMethod("rocket")}
         />
         Rocket
       </label>
@@ -107,36 +131,17 @@ export default function CheckoutPage() {
 
       <h2>{paymentNumbers[method]}</h2>
 
-      <p>
-        Send the full payment to the selected number, then enter your
-        Transaction ID below.
-      </p>
-
       <input
-        type="text"
-        placeholder="Enter Transaction ID (TrxID)"
+        placeholder="Transaction ID (TrxID)"
         value={trxId}
         onChange={(e) => setTrxId(e.target.value)}
-        style={{
-          width: "100%",
-          padding: "12px",
-          fontSize: "16px",
-          marginTop: "10px",
-        }}
       />
 
-      <button
-        onClick={submitPayment}
-        style={{
-          width: "100%",
-          marginTop: "20px",
-          padding: "14px",
-          fontSize: "18px",
-          cursor: "pointer",
-        }}
-      >
+      <br /><br />
+
+      <button onClick={submitPayment}>
         Submit Payment
       </button>
     </main>
   );
-            }
+          }
