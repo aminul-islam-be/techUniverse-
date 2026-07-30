@@ -8,7 +8,10 @@ export default function Home() {
   function formatPrice(cents) {
     const amount = (cents / 100) * rate;
     try {
-      return new Intl.NumberFormat(lang, { style: "currency", currency }).format(amount);
+      return new Intl.NumberFormat(lang, {
+        style: "currency",
+        currency,
+      }).format(amount);
     } catch {
       return `$${(cents / 100).toFixed(2)}`;
     }
@@ -28,7 +31,9 @@ export default function Home() {
           {products.map((p) => (
             <div className="card" key={p.id}>
               <div className="thumb">{p.image ? "IMAGE" : "NO IMAGE"}</div>
-              <div className="origin-tag">{t.origin} — {p.origin}</div>
+              <div className="origin-tag">
+                {t.origin} — {p.origin}
+              </div>
               <h3>{p.name}</h3>
               <p className="desc">{p.description}</p>
               <div className="row">
