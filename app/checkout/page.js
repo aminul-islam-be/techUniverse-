@@ -13,9 +13,9 @@ export default function CheckoutPage() {
   const [trxId, setTrxId] = useState("");
 
   const paymentNumbers = {
-    bkash: "01XXXXXXXXX",
-    nagad: "01XXXXXXXXX",
-    rocket: "01XXXXXXXXX",
+    bkash: "01922964696",
+    nagad: "01922964696",
+    rocket: "01922964696",
   };
 
   function submitPayment() {
