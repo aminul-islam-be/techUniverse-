@@ -1,12 +1,10 @@
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req) {
   try {
     const body = await req.json();
 
     console.log("SSLCommerz Success:", body);
-
-    // পরে এখানে Order Save, Payment Verify, Invoice তৈরি হবে
 
     return NextResponse.json({
       success: true,
