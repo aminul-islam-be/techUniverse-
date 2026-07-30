@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function CheckoutPage() {
   const searchParams = useSearchParams();
@@ -16,15 +16,27 @@ export default function CheckoutPage() {
   const [address, setAddress] = useState("");
   const [trxId, setTrxId] = useState("");
 
-  const paymentNumbers = {
-    bkash: "01922964696",
-    nagad: "01922964696",
-    rocket: "01922964696",
-  };
+  const [paymentNumbers, setPaymentNumbers] = useState({
+    bkash: "",
+    nagad: "",
+    rocket: "",
+  });
+
+  useEffect(() => {
+    const settings = JSON.parse(
+      localStorage.getItem("paymentSettings") || "{}"
+    );
+
+    setPaymentNumbers({
+      bkash: settings.bkash || "01922964696",
+      nagad: settings.nagad || "01922964696",
+      rocket: settings.rocket || "01922964696",
+    });
+  }, []);
 
   function submitPayment() {
     if (!name || !phone || !address || !trxId) {
-      alert("Please fill in all required fields.");
+      alert("Please fill all required fields.");
       return;
     }
 
@@ -37,6 +49,7 @@ export default function CheckoutPage() {
       email,
       address,
       paymentMethod: method,
+      paymentNumber: paymentNumbers[method],
       trxId,
       status: "Pending",
       createdAt: new Date().toLocaleString(),
@@ -52,7 +65,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main style={{ maxWidth: 600, margin: "40px auto", padding: 20 }}>
+    <main style={{ maxWidth: 650, margin: "40px auto", padding: 20 }}>
       <h1>Checkout</h1>
 
       <h2>{product}</h2>
@@ -92,7 +105,7 @@ export default function CheckoutPage() {
 
       <hr />
 
-      <h3>Payment Method</h3>
+      <h3>Select Payment Method</h3>
 
       <label>
         <input
