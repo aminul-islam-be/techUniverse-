@@ -35,8 +35,10 @@ a { color: inherit; text-decoration: none; }
 
 .site-header .wrap {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .brand {
@@ -62,6 +64,32 @@ a { color: inherit; text-decoration: none; }
   border: 1px solid var(--ink);
   padding: 8px 14px;
   border-radius: 2px;
+  white-space: nowrap;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.locale-switcher {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.locale-switcher select {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 6px 6px;
+  max-width: 110px;
 }
 
 .hero {
@@ -170,4 +198,4 @@ a { color: inherit; text-decoration: none; }
   font-family: var(--font-mono);
   font-size: 11px;
   color: rgba(27, 42, 74, 0.55);
-}
+  }
