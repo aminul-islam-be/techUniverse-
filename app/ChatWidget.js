@@ -1,32 +1,48 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { getFaqReply } from "../lib/faq-bot";
 
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
   const bottomRef = useRef(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, open]);
 
-  function sendMessage() {
+  async function sendMessage() {
     const text = input.trim();
-    if (!text) return;
+    if (!text || loading) return;
 
-    const userMsg = { role: "user", content: text };
-    // Choto delay diye reply dekhale ta besh natural lage,
-    // kono real API call hocche na tai kono kharoch o nei.
-    const reply = getFaqReply(text);
-
-    setMessages((prev) => [...prev, userMsg]);
+    const newMessages = [...messages, { role: "user", content: text }];
+    setMessages(newMessages);
     setInput("");
+    setLoading(true);
 
-    setTimeout(() => {
-      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
-    }, 400);
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: newMessages }),
+      });
+      const data = await res.json();
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: data.reply },
+      ]);
+    } catch (e) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: "Sorry, something went wrong. Please try again.",
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
   }
 
   function handleKeyDown(e) {
@@ -57,6 +73,7 @@ export default function ChatWidget() {
                 {m.content}
               </div>
             ))}
+            {loading && <div className="chat-bubble chat-assistant">…</div>}
             <div ref={bottomRef} />
           </div>
           <div className="chat-input-row">
@@ -66,7 +83,9 @@ export default function ChatWidget() {
               onKeyDown={handleKeyDown}
               placeholder="Type a message..."
             />
-            <button onClick={sendMessage}>Send</button>
+            <button onClick={sendMessage} disabled={loading}>
+              Send
+            </button>
           </div>
         </div>
       )}
