@@ -1,103 +1,105 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export default function CheckoutPage() {
+  const searchParams = useSearchParams();
+
+  const product = searchParams.get("product") || "";
+  const amount = searchParams.get("amount") || "0";
+
   const [method, setMethod] = useState("bkash");
+  const [trxId, setTrxId] = useState("");
+
+  const paymentNumbers = {
+    bkash: "01XXXXXXXXX",
+    nagad: "01XXXXXXXXX",
+    rocket: "01XXXXXXXXX",
+  };
+
+  function submitPayment() {
+    if (!trxId.trim()) {
+      alert("Please enter your Transaction ID (TrxID).");
+      return;
+    }
+
+    alert("Payment submitted successfully! Your order is now Pending Approval.");
+  }
 
   return (
     <main className="wrap" style={{ padding: "30px" }}>
       <h1>Checkout</h1>
 
+      <h2>{product}</h2>
+
+      <h3>Amount: ৳{amount}</h3>
+
+      <hr />
+
       <h3>Select Payment Method</h3>
 
-      <div style={{ display: "grid", gap: "10px", marginBottom: "20px" }}>
-        <label>
-          <input
-            type="radio"
-            value="bkash"
-            checked={method === "bkash"}
-            onChange={(e) => setMethod(e.target.value)}
-          />
-          bKash
-        </label>
+      <label>
+        <input
+          type="radio"
+          value="bkash"
+          checked={method === "bkash"}
+          onChange={(e) => setMethod(e.target.value)}
+        />
+        bKash
+      </label>
 
-        <label>
-          <input
-            type="radio"
-            value="nagad"
-            checked={method === "nagad"}
-            onChange={(e) => setMethod(e.target.value)}
-          />
-          Nagad
-        </label>
+      <br />
 
-        <label>
-          <input
-            type="radio"
-            value="rocket"
-            checked={method === "rocket"}
-            onChange={(e) => setMethod(e.target.value)}
-          />
-          Rocket
-        </label>
-      </div>
+      <label>
+        <input
+          type="radio"
+          value="nagad"
+          checked={method === "nagad"}
+          onChange={(e) => setMethod(e.target.value)}
+        />
+        Nagad
+      </label>
 
-      <div
+      <br />
+
+      <label>
+        <input
+          type="radio"
+          value="rocket"
+          checked={method === "rocket"}
+          onChange={(e) => setMethod(e.target.value)}
+        />
+        Rocket
+      </label>
+
+      <hr />
+
+      <h3>Send Money To</h3>
+
+      <h2>{paymentNumbers[method]}</h2>
+
+      <input
+        type="text"
+        placeholder="Enter Transaction ID"
+        value={trxId}
+        onChange={(e) => setTrxId(e.target.value)}
         style={{
-          border: "1px solid #ddd",
-          padding: "15px",
-          borderRadius: "10px",
+          width: "100%",
+          padding: "12px",
+          marginTop: "15px",
+        }}
+      />
+
+      <button
+        onClick={submitPayment}
+        style={{
+          marginTop: "20px",
+          padding: "12px 20px",
         }}
       >
-        <h3>Send Payment To</h3>
-
-        {method === "bkash" && (
-          <p>
-            <strong>bKash:</strong> 01XXXXXXXXX
-          </p>
-        )}
-
-        {method === "nagad" && (
-          <p>
-            <strong>Nagad:</strong> 01XXXXXXXXX
-          </p>
-        )}
-
-        {method === "rocket" && (
-          <p>
-            <strong>Rocket:</strong> 01XXXXXXXXX
-          </p>
-        )}
-
-        <p>
-          <strong>Amount:</strong> ৳1000
-        </p>
-
-        <div style={{ marginTop: "20px" }}>
-          <label>Transaction ID (TrxID)</label>
-
-          <input
-            type="text"
-            placeholder="Enter TrxID"
-            style={{
-              width: "100%",
-              padding: "10px",
-              marginTop: "8px",
-            }}
-          />
-        </div>
-
-        <button
-          style={{
-            marginTop: "20px",
-            padding: "12px 20px",
-            cursor: "pointer",
-          }}
-        >
-          Submit Payment
-        </button>
-      </div>
+        Submit Payment
+      </button>
     </main>
   );
-              }
+          }
