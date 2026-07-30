@@ -1,13 +1,44 @@
 export default function ThankYouPage() {
   return (
-    <main style={{ padding: "40px", textAlign: "center" }}>
+    <main
+      style={{
+        maxWidth: "700px",
+        margin: "50px auto",
+        padding: "30px",
+        textAlign: "center",
+      }}
+    >
       <h1>🎉 Thank You!</h1>
 
-      <p>Your payment request has been submitted.</p>
+      <h2>Your Order Has Been Submitted</h2>
 
-      <p>Your order is now waiting for Admin Approval.</p>
+      <p>
+        We have received your payment information.
+      </p>
 
-      <a href="/">Continue Shopping</a>
+      <p>
+        Your order is currently <strong>Pending Verification</strong>.
+      </p>
+
+      <p>
+        Our team will verify your payment and confirm your order shortly.
+      </p>
+
+      <br />
+
+      <a
+        href="/"
+        style={{
+          display: "inline-block",
+          padding: "12px 24px",
+          background: "#2563eb",
+          color: "#fff",
+          textDecoration: "none",
+          borderRadius: "8px",
+        }}
+      >
+        Continue Shopping
+      </a>
     </main>
   );
 }
