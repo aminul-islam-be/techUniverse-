@@ -1,6 +1,7 @@
 "use client";
 import { useLocale } from "./LocaleProvider";
 import LocaleSwitcher from "./LocaleSwitcher";
+import ChatWidget from "./ChatWidget";
 
 export default function SiteChrome({ children }) {
   const { t, currency } = useLocale();
@@ -25,6 +26,7 @@ export default function SiteChrome({ children }) {
       <footer className="site-footer">
         <div className="wrap">{t.footer.replace("{currency}", currency)}</div>
       </footer>
+      <ChatWidget />
     </>
   );
     }
