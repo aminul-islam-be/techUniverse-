@@ -6,7 +6,7 @@ import { useState } from "react";
 export default function CheckoutPage() {
   const searchParams = useSearchParams();
 
-  const product = searchParams.get("product") || "";
+  const product = searchParams.get("product") || "Product";
   const amount = searchParams.get("amount") || "0";
 
   const [method, setMethod] = useState("bkash");
@@ -20,16 +20,42 @@ export default function CheckoutPage() {
 
   function submitPayment() {
     if (!trxId.trim()) {
-      alert("Please enter your Transaction ID (TrxID).");
+      alert("Please enter your Transaction ID (TrxID)");
       return;
     }
 
-    alert("Payment submitted successfully! Your order is now Pending Approval.");
+    const order = {
+      id: Date.now(),
+      product,
+      amount,
+      paymentMethod: method,
+      trxId,
+      status: "Pending",
+      createdAt: new Date().toLocaleString(),
+    };
+
+    const oldOrders = JSON.parse(localStorage.getItem("orders") || "[]");
+
+    oldOrders.push(order);
+
+    localStorage.setItem("orders", JSON.stringify(oldOrders));
+
+    alert("Order Submitted Successfully!");
+
+    window.location.href = "/thank-you";
   }
 
   return (
-    <main className="wrap" style={{ padding: "30px" }}>
+    <main
+      style={{
+        maxWidth: "600px",
+        margin: "40px auto",
+        padding: "20px",
+      }}
+    >
       <h1>Checkout</h1>
+
+      <hr />
 
       <h2>{product}</h2>
 
@@ -50,6 +76,7 @@ export default function CheckoutPage() {
       </label>
 
       <br />
+      <br />
 
       <label>
         <input
@@ -61,6 +88,7 @@ export default function CheckoutPage() {
         Nagad
       </label>
 
+      <br />
       <br />
 
       <label>
@@ -79,27 +107,36 @@ export default function CheckoutPage() {
 
       <h2>{paymentNumbers[method]}</h2>
 
+      <p>
+        Send the full payment to the selected number, then enter your
+        Transaction ID below.
+      </p>
+
       <input
         type="text"
-        placeholder="Enter Transaction ID"
+        placeholder="Enter Transaction ID (TrxID)"
         value={trxId}
         onChange={(e) => setTrxId(e.target.value)}
         style={{
           width: "100%",
           padding: "12px",
-          marginTop: "15px",
+          fontSize: "16px",
+          marginTop: "10px",
         }}
       />
 
       <button
         onClick={submitPayment}
         style={{
+          width: "100%",
           marginTop: "20px",
-          padding: "12px 20px",
+          padding: "14px",
+          fontSize: "18px",
+          cursor: "pointer",
         }}
       >
         Submit Payment
       </button>
     </main>
   );
-          }
+            }
