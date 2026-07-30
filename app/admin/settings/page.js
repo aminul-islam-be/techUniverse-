@@ -42,7 +42,7 @@ export default function AdminSettings() {
 
       <br />
 
-      <label>bKash Number</label>
+      <label>01922964696</label>
 
       <input
         value={bkash}
@@ -55,7 +55,7 @@ export default function AdminSettings() {
         }}
       />
 
-      <label>Nagad Number</label>
+      <label>01922964696</label>
 
       <input
         value={nagad}
@@ -68,7 +68,7 @@ export default function AdminSettings() {
         }}
       />
 
-      <label>Rocket Number</label>
+      <label>01922964696</label>
 
       <input
         value={rocket}
