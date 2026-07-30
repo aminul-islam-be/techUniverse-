@@ -24,22 +24,28 @@ export async function POST(req) {
     const payload = {
       store_id: process.env.SSLCZ_STORE_ID,
       store_passwd: process.env.SSLCZ_STORE_PASSWORD,
+
       total_amount: amount,
       currency: "BDT",
+
       tran_id: transactionId,
+
       success_url: `${baseUrl}/api/sslcommerz/success`,
       fail_url: `${baseUrl}/api/sslcommerz/fail`,
       cancel_url: `${baseUrl}/api/sslcommerz/cancel`,
       ipn_url: `${baseUrl}/api/sslcommerz/ipn`,
+
       product_name: productName,
       product_category: "Electronics",
       product_profile: "general",
+
       cus_name: customerName,
       cus_email: customerEmail,
       cus_add1: "Dhaka",
       cus_city: "Dhaka",
       cus_country: "Bangladesh",
       cus_phone: customerPhone,
+
       shipping_method: "NO",
     };
 
@@ -85,4 +91,4 @@ export async function POST(req) {
       { status: 500 }
     );
   }
-      }
+}
