@@ -1,5 +1,6 @@
 "use client";
 import { useLocale } from "./LocaleProvider";
+import LocaleSwitcher from "./LocaleSwitcher";
 
 export default function SiteChrome({ children }) {
   const { t, currency } = useLocale();
@@ -12,7 +13,12 @@ export default function SiteChrome({ children }) {
             Meridian Market
             <small>{t.brandTagline}</small>
           </a>
-          <a href="/cart" className="cart-link">{t.cart} (0)</a>
+          <div className="header-right">
+            <LocaleSwitcher />
+            <a href="/cart" className="cart-link">
+              {t.cart} (0)
+            </a>
+          </div>
         </div>
       </header>
       {children}
@@ -21,4 +27,4 @@ export default function SiteChrome({ children }) {
       </footer>
     </>
   );
-}
+    }
