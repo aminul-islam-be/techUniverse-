@@ -33,7 +33,7 @@ Shipping: worldwide shipping is offered. Prices are shown to each visitor in the
           Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
         },
         body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
+          model: "openai/gpt-oss-20b",
           messages: groqMessages,
           max_tokens: 300,
         }),
