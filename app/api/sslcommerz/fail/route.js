@@ -1,12 +1,10 @@
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req) {
   try {
     const body = await req.json();
 
     console.log("SSLCommerz Payment Failed:", body);
-
-    // পরে এখানে Failed Order Log করা হবে
 
     return NextResponse.json({
       success: false,
