@@ -18,21 +18,24 @@ ${productList}
 
 Shipping: worldwide shipping is offered. Prices are shown to each visitor in their local currency automatically.`;
 
-    // Gemini format: role "user"/"model", contents shape
-    const contents = messages.map((m) => ({
-      role: m.role === "assistant" ? "model" : "user",
-      parts: [{ text: m.content }],
-    }));
+    // Groq uses the same message format as OpenAI: { role, content }
+    const groqMessages = [
+      { role: "system", content: systemPrompt },
+      ...messages.map((m) => ({ role: m.role, content: m.content })),
+    ];
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,,
+      "https://api.groq.com/openai/v1/chat/completions",
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+        },
         body: JSON.stringify({
-          contents,
-          systemInstruction: { parts: [{ text: systemPrompt }] },
-          generationConfig: { maxOutputTokens: 300 },
+          model: "llama-3.3-70b-versatile",
+          messages: groqMessages,
+          max_tokens: 300,
         }),
       }
     );
@@ -40,14 +43,14 @@ Shipping: worldwide shipping is offered. Prices are shown to each visitor in the
     const data = await response.json();
 
     if (data.error) {
-      console.error("Gemini API error:", data.error);
+      console.error("Groq API error:", data.error);
       return Response.json({
         reply: "Sorry, something went wrong on our end. Please try again in a moment.",
       });
     }
 
     const reply =
-      data.candidates?.[0]?.content?.parts?.[0]?.text ||
+      data.choices?.[0]?.message?.content ||
       "Sorry, I couldn't understand that.";
     return Response.json({ reply });
   } catch (e) {
@@ -56,4 +59,4 @@ Shipping: worldwide shipping is offered. Prices are shown to each visitor in the
       reply: "Sorry, something went wrong. Please try again in a moment.",
     });
   }
-                    }
+}
